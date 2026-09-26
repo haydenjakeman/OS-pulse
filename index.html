@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse OS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="boot">
+  <h1>PULSE</h1>
+  <div class="loading"></div>
+  <p>Starting Pulse OS...</p>
+</div>
+
+<div id="desktop">
+
+  <div id="wallpaper"></div>
+
+  <div id="windows"></div>
+
+  <div id="launcher">
+    <h2>Pulse OS</h2>
+
+    <input id="searchApps" placeholder="Search apps...">
+
+    <div class="apps">
+      <button onclick="openBrowser()">🌐<br>Browser</button>
+      <button onclick="openFiles()">📁<br>Files</button>
+      <button onclick="openStore()">🛍️<br>Store</button>
+      <button onclick="openSettings()">⚙️<br>Settings</button>
+      <button onclick="openAbout()">💻<br>About</button>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <button id="startButton" onclick="toggleLauncher()">◉</button>
+
+    <div id="tasks"></div>
+
+    <div id="clock"></div>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
