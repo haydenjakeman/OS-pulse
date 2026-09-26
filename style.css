@@ -1,397 +1,459 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
 body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
-  color: white;
-  background: #090b12;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    color: white;
+    background: #08090f;
 }
 
-/* BOOT SCREEN */
+
+/* BOOT */
 
 #boot {
-  position: fixed;
-  inset: 0;
-  background: #090b12;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
+    position: fixed;
+    inset: 0;
+
+    background: #08090f;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 999999;
 }
 
-#boot h1 {
-  font-size: 55px;
-  letter-spacing: 8px;
-  margin: 0 0 25px;
+.logo {
+    font-size: 55px;
+    font-weight: bold;
+    letter-spacing: 10px;
+    margin-bottom: 25px;
 }
 
-.loading {
-  width: 220px;
-  height: 5px;
-  background: #292929;
-  border-radius: 10px;
-  overflow: hidden;
+.bar {
+    width: 220px;
+    height: 5px;
+
+    background: #292929;
+
+    border-radius: 10px;
+
+    overflow: hidden;
 }
 
-.loading::after {
-  content: "";
-  display: block;
-  height: 100%;
-  width: 50%;
-  background: #7657ff;
-  animation: load 1.2s infinite;
+.bar::after {
+    content: "";
+
+    display: block;
+
+    width: 50%;
+    height: 100%;
+
+    background: #7657ff;
+
+    animation: loading 1.2s infinite;
 }
 
-@keyframes load {
-  from {
-    transform: translateX(-100%);
-  }
+@keyframes loading {
 
-  to {
-    transform: translateX(300%);
-  }
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(300%);
+    }
+
 }
+
+#boot p {
+    opacity: 0.6;
+}
+
 
 /* DESKTOP */
 
 #desktop {
-  display: none;
-  position: fixed;
-  inset: 0;
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
 }
 
-/* WALLPAPER */
 
-#wallpaper {
-  position: absolute;
-  inset: 0;
+/* BACKGROUND */
 
-  background:
-    linear-gradient(
-      135deg,
-      #080910 0%,
-      #17152d 50%,
-      #082c3b 100%
-    );
+.background {
+    position: absolute;
 
-  z-index: 0;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #08090f,
+            #19172d,
+            #092f40
+        );
 }
+
+
+/* START MENU */
+
+#startMenu {
+    display: none;
+
+    position: absolute;
+
+    left: 15px;
+    bottom: 70px;
+
+    width: 340px;
+
+    padding: 20px;
+
+    background: #151720;
+
+    border: 1px solid #383b49;
+
+    border-radius: 16px;
+
+    z-index: 9000;
+
+    box-shadow:
+        0 20px 60px #000;
+}
+
+#startMenu h2 {
+    margin-top: 0;
+}
+
+#appSearch {
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 9px;
+
+    border: 1px solid #444;
+
+    background: #20222d;
+
+    color: white;
+
+    outline: none;
+
+    margin-bottom: 15px;
+}
+
+.apps {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 8px;
+}
+
+.apps button {
+    border: 0;
+
+    border-radius: 10px;
+
+    background: #20222d;
+
+    color: white;
+
+    padding: 15px 5px;
+
+    cursor: pointer;
+}
+
+.apps button:hover {
+    background: #303342;
+}
+
+.apps span {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 12px;
+}
+
 
 /* TASKBAR */
 
 #taskbar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+    position: absolute;
 
-  height: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
-  display: flex;
-  align-items: center;
+    height: 60px;
 
-  padding: 7px;
+    display: flex;
 
-  background: rgba(8, 9, 15, 0.97);
+    align-items: center;
 
-  border-top: 1px solid #333;
+    padding: 7px;
 
-  z-index: 5000;
+    background: #090a10;
+
+    border-top: 1px solid #333;
+
+    z-index: 8000;
 }
 
-#startButton {
-  width: 46px;
-  height: 46px;
+#start {
+    width: 46px;
+    height: 46px;
 
-  border: none;
-  border-radius: 10px;
+    border: 0;
 
-  color: white;
-  background: #20222c;
+    border-radius: 10px;
 
-  font-size: 22px;
+    background: #20222d;
 
-  cursor: pointer;
-}
+    color: white;
 
-#startButton:active {
-  background: #303342;
+    font-size: 22px;
+
+    cursor: pointer;
 }
 
 #tasks {
-  flex: 1;
-  margin-left: 8px;
+    flex: 1;
 
-  display: flex;
-  gap: 5px;
+    display: flex;
+
+    gap: 6px;
+
+    margin-left: 8px;
 }
 
 .task {
-  border: none;
-  border-radius: 9px;
+    border: 0;
 
-  padding: 10px 14px;
+    border-radius: 9px;
 
-  color: white;
-  background: #20222c;
+    padding: 10px 14px;
 
-  cursor: pointer;
+    background: #20222d;
+
+    color: white;
+
+    cursor: pointer;
 }
 
 #clock {
-  padding: 10px;
-  font-size: 14px;
+    padding: 10px;
+
+    font-size: 14px;
 }
 
-/* APP LAUNCHER */
-
-#launcher {
-  position: absolute;
-
-  left: 15px;
-  bottom: 70px;
-
-  width: 340px;
-
-  padding: 20px;
-
-  background: #151720;
-
-  border: 1px solid #383a45;
-
-  border-radius: 16px;
-
-  display: none;
-
-  z-index: 6000;
-
-  box-shadow: 0 15px 50px #000;
-}
-
-#launcher h2 {
-  margin-top: 0;
-}
-
-#launcher input {
-  width: 100%;
-
-  padding: 12px;
-
-  border-radius: 9px;
-
-  border: 1px solid #444;
-
-  background: #20222c;
-
-  color: white;
-
-  outline: none;
-
-  margin-bottom: 15px;
-}
-
-.apps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 9px;
-}
-
-.apps button {
-  padding: 15px 5px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  color: white;
-
-  background: #20222c;
-
-  cursor: pointer;
-}
-
-.apps button:hover {
-  background: #303342;
-}
 
 /* WINDOWS */
 
 .window {
-  position: absolute;
+    position: absolute;
 
-  width: min(850px, calc(100vw - 20px));
-  height: min(600px, calc(100vh - 90px));
+    left: 50%;
+    top: 45%;
 
-  left: 50%;
-  top: 45%;
+    transform:
+        translate(-50%, -50%);
 
-  transform: translate(-50%, -50%);
+    width:
+        min(850px, calc(100vw - 20px));
 
-  background: #11131c;
+    height:
+        min(600px, calc(100vh - 90px));
 
-  border: 1px solid #383a45;
+    background: #11131c;
 
-  border-radius: 14px;
+    border: 1px solid #383b49;
 
-  box-shadow: 0 25px 70px #000;
+    border-radius: 14px;
 
-  overflow: hidden;
+    overflow: hidden;
 
-  display: flex;
-  flex-direction: column;
+    box-shadow:
+        0 25px 70px #000;
 
-  z-index: 100;
+    display: flex;
+
+    flex-direction: column;
+
+    z-index: 100;
 }
 
 .titlebar {
-  height: 50px;
+    height: 50px;
 
-  display: flex;
-  align-items: center;
+    display: flex;
 
-  padding: 0 12px;
+    align-items: center;
 
-  background: #171923;
+    padding: 0 12px;
 
-  border-bottom: 1px solid #30323d;
+    background: #171923;
+
+    border-bottom:
+        1px solid #30323d;
 }
 
 .titlebar b {
-  flex: 1;
-  margin-left: 8px;
+    flex: 1;
+
+    margin-left: 8px;
 }
 
 .close {
-  border: none;
+    width: 35px;
+    height: 30px;
 
-  background: #252733;
+    border: 0;
 
-  color: white;
+    border-radius: 7px;
 
-  width: 35px;
-  height: 30px;
+    background: #252733;
 
-  border-radius: 7px;
+    color: white;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .windowBody {
-  flex: 1;
-  overflow: auto;
-  padding: 18px;
+    flex: 1;
+
+    padding: 18px;
+
+    overflow: auto;
 }
+
 
 /* BROWSER */
 
 .browserBar {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
 }
 
 .browserBar input {
-  flex: 1;
+    flex: 1;
 
-  padding: 11px;
+    padding: 11px;
 
-  background: #20222c;
+    border-radius: 9px;
 
-  border: 1px solid #444;
+    border: 1px solid #444;
 
-  color: white;
+    background: #20222d;
 
-  border-radius: 9px;
+    color: white;
 }
 
 .browserBar button,
 .primary {
-  border: none;
+    border: 0;
 
-  padding: 10px 15px;
+    border-radius: 9px;
 
-  border-radius: 9px;
+    padding: 10px 15px;
 
-  color: white;
+    background: #7657ff;
 
-  background: #7657ff;
+    color: white;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .browserFrame {
-  width: 100%;
-  height: calc(100% - 65px);
+    width: 100%;
+    height: calc(100% - 65px);
 
-  border: none;
+    border: 0;
 
-  background: white;
+    background: white;
 
-  border-radius: 9px;
+    border-radius: 9px;
 }
+
 
 /* FILES */
 
 .file {
-  padding: 14px;
+    padding: 14px;
 
-  margin: 8px 0;
+    margin: 8px 0;
 
-  border-radius: 9px;
+    background: #20222d;
 
-  background: #20222c;
+    border-radius: 9px;
 }
+
 
 /* STORE */
 
 .storeItem {
-  display: flex;
-  align-items: center;
+    display: flex;
 
-  gap: 15px;
+    align-items: center;
 
-  padding: 15px;
+    gap: 15px;
 
-  margin-bottom: 10px;
+    padding: 15px;
 
-  border-radius: 10px;
+    margin-bottom: 10px;
 
-  background: #20222c;
+    background: #20222d;
+
+    border-radius: 10px;
 }
 
 .storeItem div {
-  flex: 1;
+    flex: 1;
 }
+
 
 /* SETTINGS */
 
 .setting {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
 
-  padding: 15px 0;
+    justify-content: space-between;
 
-  border-bottom: 1px solid #30323d;
+    padding: 15px 0;
+
+    border-bottom: 1px solid #30323d;
 }
 
-/* MOBILE */
 
-@media (max-width: 600px) {
+@media(max-width:600px) {
 
-  #launcher {
-    width: calc(100vw - 30px);
-  }
-
-  .window {
-    width: calc(100vw - 12px);
-    height: calc(100vh - 75px);
-  }
-
+    #startMenu {
+        width: calc(100vw - 30px);
     }
+
+    .window {
+        width: calc(100vw - 12px);
+
+        height:
+            calc(100vh - 75px);
+    }
+
+}
