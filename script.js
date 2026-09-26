@@ -1,5 +1,5 @@
 let windows = {};
-let windowNumber = 100;
+let windowLevel = 100;
 
 
 /* =========================
@@ -10,18 +10,11 @@ window.addEventListener("load", function () {
 
     setTimeout(function () {
 
-        const boot = document.getElementById("boot");
-        const desktop = document.getElementById("desktop");
+        document.getElementById("boot").style.display = "none";
 
-        if (boot) {
-            boot.style.display = "none";
-        }
+        document.getElementById("desktop").style.display = "block";
 
-        if (desktop) {
-            desktop.style.display = "block";
-        }
-
-    }, 1800);
+    }, 2000);
 
 });
 
@@ -30,38 +23,54 @@ window.addEventListener("load", function () {
    START MENU
 ========================= */
 
-function toggleLauncher() {
+function toggleStart() {
 
-    const launcher = document.getElementById("launcher");
+    const menu =
+        document.getElementById("startMenu");
 
-    if (launcher.style.display === "block") {
-        launcher.style.display = "none";
+    if (menu.style.display === "block") {
+
+        menu.style.display = "none";
+
     } else {
-        launcher.style.display = "block";
+
+        menu.style.display = "block";
+
     }
 
 }
 
 
 /* =========================
-   CREATE WINDOWS
+   WINDOW CREATOR
 ========================= */
 
-function createWindow(name, title, icon, content) {
+function createWindow(
+    name,
+    title,
+    icon,
+    content
+) {
 
     if (windows[name]) {
 
-        windows[name].style.zIndex = ++windowNumber;
+        windows[name].style.zIndex =
+            ++windowLevel;
 
         return;
 
     }
 
-    const win = document.createElement("div");
+
+    const win =
+        document.createElement("div");
+
 
     win.className = "window";
 
-    win.style.zIndex = ++windowNumber;
+    win.style.zIndex =
+        ++windowLevel;
+
 
     win.innerHTML = `
 
@@ -71,7 +80,9 @@ function createWindow(name, title, icon, content) {
 
             <b>${title}</b>
 
-            <button class="close">×</button>
+            <button class="close">
+                ×
+            </button>
 
         </div>
 
@@ -92,42 +103,45 @@ function createWindow(name, title, icon, content) {
     windows[name] = win;
 
 
-    /* CLOSE BUTTON */
+    win.querySelector(".close")
+        .onclick = function () {
 
-    win.querySelector(".close").onclick = function () {
+            win.remove();
 
-        win.remove();
-
-        delete windows[name];
-
-        const task =
-            document.querySelector(
-                '[data-task="' + name + '"]'
-            );
-
-        if (task) {
-            task.remove();
-        }
-
-    };
+            delete windows[name];
 
 
-    /* TASKBAR BUTTON */
+            const task =
+                document.querySelector(
+                    '[data-task="' +
+                    name +
+                    '"]'
+                );
+
+
+            if (task) {
+                task.remove();
+            }
+
+        };
+
 
     const task =
         document.createElement("button");
+
 
     task.className = "task";
 
     task.dataset.task = name;
 
-    task.innerHTML =
+    task.textContent =
         icon + " " + title;
 
 
     task.onclick = function () {
 
-        win.style.zIndex = ++windowNumber;
+        win.style.zIndex =
+            ++windowLevel;
 
     };
 
@@ -145,7 +159,8 @@ function createWindow(name, title, icon, content) {
 
 function openBrowser() {
 
-    toggleLauncher();
+    toggleStart();
+
 
     createWindow(
 
@@ -160,17 +175,16 @@ function openBrowser() {
         <div class="browserBar">
 
             <input
-                id="browserAddress"
+                id="address"
                 value="https://www.google.com"
-                placeholder="Search Google or enter a website..."
+                placeholder="Search Google..."
             >
 
-            <button onclick="goBrowser()">
+            <button onclick="go()">
                 Go
             </button>
 
         </div>
-
 
         <iframe
             id="browserFrame"
@@ -185,16 +199,10 @@ function openBrowser() {
 }
 
 
-/* =========================
-   BROWSER SEARCH
-========================= */
-
-function goBrowser() {
+function go() {
 
     const input =
-        document.getElementById(
-            "browserAddress"
-        );
+        document.getElementById("address");
 
     if (!input) return;
 
@@ -204,8 +212,8 @@ function goBrowser() {
 
 
     if (
-        !address.startsWith("http://") &&
-        !address.startsWith("https://")
+        !address.startsWith("https://") &&
+        !address.startsWith("http://")
     ) {
 
         address =
@@ -215,25 +223,21 @@ function goBrowser() {
     }
 
 
-    const frame =
-        document.getElementById(
-            "browserFrame"
-        );
-
-    if (frame) {
-        frame.src = address;
-    }
+    document
+        .getElementById("browserFrame")
+        .src = address;
 
 }
 
 
 /* =========================
-   FILE MANAGER
+   FILES
 ========================= */
 
 function openFiles() {
 
-    toggleLauncher();
+    toggleStart();
+
 
     createWindow(
 
@@ -247,10 +251,6 @@ function openFiles() {
 
         <h2>📁 Pulse Files</h2>
 
-        <p>
-            Welcome to your Pulse OS file manager.
-        </p>
-
         <div class="file">
             📄 Welcome.txt
         </div>
@@ -263,7 +263,7 @@ function openFiles() {
 
         <button
             class="primary"
-            onclick="createTestFile()">
+            onclick="downloadTest()">
 
             Create Test File
 
@@ -276,20 +276,14 @@ function openFiles() {
 }
 
 
-/* =========================
-   CREATE DOWNLOAD
-========================= */
-
-function createTestFile() {
-
-    const text =
-        "Welcome to Pulse OS!";
+function downloadTest() {
 
     const blob =
         new Blob(
-            [text],
+            ["Welcome to Pulse OS!"],
             {
-                type: "text/plain"
+                type:
+                    "text/plain"
             }
         );
 
@@ -308,11 +302,7 @@ function createTestFile() {
         "Pulse-Welcome.txt";
 
 
-    document.body.appendChild(link);
-
     link.click();
-
-    document.body.removeChild(link);
 
 
     URL.revokeObjectURL(url);
@@ -326,7 +316,8 @@ function createTestFile() {
 
 function openStore() {
 
-    toggleLauncher();
+    toggleStart();
+
 
     createWindow(
 
@@ -340,11 +331,6 @@ function openStore() {
 
         <h2>🛍️ Pulse App Store</h2>
 
-        <p>
-            Download and open apps for Pulse OS.
-        </p>
-
-
         <div class="storeItem">
 
             🧮
@@ -356,7 +342,7 @@ function openStore() {
                 <br>
 
                 <small>
-                    A simple calculator.
+                    Calculator app
                 </small>
 
             </div>
@@ -383,7 +369,7 @@ function openStore() {
                 <br>
 
                 <small>
-                    Write and save notes.
+                    Notes app
                 </small>
 
             </div>
@@ -397,7 +383,6 @@ function openStore() {
             </button>
 
         </div>
-
 
         `
 
@@ -423,17 +408,17 @@ function openCalculator() {
         `
 
         <input
-            id="calcInput"
+            id="calculatorInput"
             style="
                 width:100%;
                 padding:15px;
-                background:#20222c;
+                background:#20222d;
                 color:white;
                 border:1px solid #444;
                 border-radius:10px;
-                font-size:22px;
+                font-size:20px;
             "
-            placeholder="Example: 25 + 25"
+            placeholder="Example: 10 + 5"
         >
 
         <br><br>
@@ -446,7 +431,7 @@ function openCalculator() {
 
         </button>
 
-        <h2 id="calcResult"></h2>
+        <h2 id="calculatorResult"></h2>
 
         `
 
@@ -459,12 +444,12 @@ function calculate() {
 
     const input =
         document.getElementById(
-            "calcInput"
+            "calculatorInput"
         );
 
     const result =
         document.getElementById(
-            "calcResult"
+            "calculatorResult"
         );
 
 
@@ -472,7 +457,7 @@ function calculate() {
 
         result.textContent =
             Function(
-                '"use strict"; return (' +
+                '"use strict";return (' +
                 input.value +
                 ')'
             )();
@@ -506,11 +491,11 @@ function openNotes() {
         <h2>📝 Notes</h2>
 
         <textarea
-            id="notesArea"
+            id="notes"
             style="
                 width:100%;
                 height:300px;
-                background:#20222c;
+                background:#20222d;
                 color:white;
                 border:1px solid #444;
                 border-radius:10px;
@@ -526,7 +511,7 @@ function openNotes() {
             class="primary"
             onclick="saveNotes()">
 
-            Save Notes
+            Save
 
         </button>
 
@@ -544,7 +529,7 @@ function openNotes() {
     if (saved) {
 
         document.getElementById(
-            "notesArea"
+            "notes"
         ).value = saved;
 
     }
@@ -554,19 +539,17 @@ function openNotes() {
 
 function saveNotes() {
 
-    const text =
-        document.getElementById(
-            "notesArea"
-        ).value;
-
-
     localStorage.setItem(
+
         "pulseNotes",
-        text
+
+        document.getElementById(
+            "notes"
+        ).value
+
     );
 
-
-    alert("Notes saved!");
+    alert("Saved!");
 
 }
 
@@ -577,7 +560,8 @@ function saveNotes() {
 
 function openSettings() {
 
-    toggleLauncher();
+    toggleStart();
+
 
     createWindow(
 
@@ -590,7 +574,6 @@ function openSettings() {
         `
 
         <h2>⚙️ Settings</h2>
-
 
         <div class="setting">
 
@@ -607,7 +590,6 @@ function openSettings() {
             </button>
 
         </div>
-
 
         <div class="setting">
 
@@ -632,16 +614,12 @@ function openSettings() {
 }
 
 
-/* =========================
-   CHANGE WALLPAPER
-========================= */
-
 function changeWallpaper() {
 
-    document.getElementById(
-        "wallpaper"
+    document.querySelector(
+        ".background"
     ).style.background =
-        "linear-gradient(135deg,#35115e,#063f54,#080910)";
+        "linear-gradient(135deg,#38105d,#06445a,#08090f)";
 
 }
 
@@ -652,7 +630,8 @@ function changeWallpaper() {
 
 function openAbout() {
 
-    toggleLauncher();
+    toggleStart();
+
 
     createWindow(
 
@@ -669,12 +648,11 @@ function openAbout() {
         <h3>Version 1.0</h3>
 
         <p>
-            A browser-based operating system
-            built with HTML, CSS and JavaScript.
+            A browser-based operating system.
         </p>
 
         <p>
-            Made to run through GitHub Pages.
+            Built using HTML, CSS and JavaScript.
         </p>
 
         `
@@ -699,12 +677,8 @@ function updateClock() {
     if (!clock) return;
 
 
-    const now =
-        new Date();
-
-
     clock.textContent =
-        now.toLocaleTimeString(
+        new Date().toLocaleTimeString(
             [],
             {
                 hour: "2-digit",
@@ -729,7 +703,7 @@ updateClock();
 
 const search =
     document.getElementById(
-        "searchApps"
+        "appSearch"
     );
 
 
@@ -747,25 +721,18 @@ if (search) {
                 .querySelectorAll(
                     ".apps button"
                 )
-                .forEach(function (button) {
-
-                    if (
-                        button.textContent
-                            .toLowerCase()
-                            .includes(value)
-                    ) {
+                .forEach(
+                    function(button) {
 
                         button.style.display =
-                            "block";
-
-                    } else {
-
-                        button.style.display =
-                            "none";
+                            button.textContent
+                                .toLowerCase()
+                                .includes(value)
+                                ? "block"
+                                : "none";
 
                     }
-
-                });
+                );
 
         }
     );
