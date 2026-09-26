@@ -2,37 +2,41 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   font-family: Arial, sans-serif;
   color: white;
-  overflow: hidden;
-  background: #080910;
+  background: #090b12;
 }
 
-/* BOOT */
+/* BOOT SCREEN */
 
 #boot {
   position: fixed;
   inset: 0;
-  background: #080910;
+  background: #090b12;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 99999;
 }
 
 #boot h1 {
-  font-size: 60px;
-  letter-spacing: 10px;
+  font-size: 55px;
+  letter-spacing: 8px;
+  margin: 0 0 25px;
 }
 
 .loading {
   width: 220px;
   height: 5px;
   background: #292929;
-  border-radius: 20px;
+  border-radius: 10px;
   overflow: hidden;
 }
 
@@ -40,12 +44,12 @@ body {
   content: "";
   display: block;
   height: 100%;
-  width: 40%;
+  width: 50%;
   background: #7657ff;
-  animation: loading 1.5s infinite;
+  animation: load 1.2s infinite;
 }
 
-@keyframes loading {
+@keyframes load {
   from {
     transform: translateX(-100%);
   }
@@ -59,101 +63,120 @@ body {
 
 #desktop {
   display: none;
-  height: 100vh;
-  position: relative;
+  position: fixed;
+  inset: 0;
 }
+
+/* WALLPAPER */
 
 #wallpaper {
   position: absolute;
   inset: 0;
 
   background:
-    radial-gradient(circle at 20% 20%, #45277c, transparent 35%),
-    radial-gradient(circle at 80% 70%, #154e68, transparent 40%),
-    linear-gradient(135deg, #080910, #17182d);
+    linear-gradient(
+      135deg,
+      #080910 0%,
+      #17152d 50%,
+      #082c3b 100%
+    );
+
+  z-index: 0;
 }
 
 /* TASKBAR */
 
 #taskbar {
   position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
+  bottom: 0;
 
   height: 60px;
 
   display: flex;
   align-items: center;
 
-  padding: 8px;
+  padding: 7px;
 
-  background: rgba(10, 10, 16, 0.85);
-  backdrop-filter: blur(20px);
+  background: rgba(8, 9, 15, 0.97);
 
-  border-top: 1px solid rgba(255,255,255,.1);
+  border-top: 1px solid #333;
 
   z-index: 5000;
 }
 
 #startButton {
-  width: 45px;
-  height: 45px;
+  width: 46px;
+  height: 46px;
 
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
 
   color: white;
-  background: rgba(255,255,255,.08);
+  background: #20222c;
 
   font-size: 22px;
 
   cursor: pointer;
 }
 
+#startButton:active {
+  background: #303342;
+}
+
 #tasks {
   flex: 1;
+  margin-left: 8px;
+
   display: flex;
   gap: 5px;
-  margin-left: 8px;
 }
 
 .task {
   border: none;
-  background: rgba(255,255,255,.08);
-  color: white;
+  border-radius: 9px;
+
   padding: 10px 14px;
-  border-radius: 10px;
+
+  color: white;
+  background: #20222c;
+
   cursor: pointer;
 }
 
 #clock {
   padding: 10px;
-  opacity: .8;
+  font-size: 14px;
 }
 
-/* LAUNCHER */
+/* APP LAUNCHER */
 
 #launcher {
   position: absolute;
 
-  bottom: 70px;
   left: 15px;
+  bottom: 70px;
 
   width: 340px;
 
   padding: 20px;
 
-  background: rgba(20,20,30,.85);
-  backdrop-filter: blur(25px);
+  background: #151720;
 
-  border: 1px solid rgba(255,255,255,.12);
+  border: 1px solid #383a45;
 
-  border-radius: 20px;
+  border-radius: 16px;
 
   display: none;
 
   z-index: 6000;
+
+  box-shadow: 0 15px 50px #000;
+}
+
+#launcher h2 {
+  margin-top: 0;
 }
 
 #launcher input {
@@ -161,11 +184,11 @@ body {
 
   padding: 12px;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
-  border: 1px solid rgba(255,255,255,.1);
+  border: 1px solid #444;
 
-  background: rgba(255,255,255,.08);
+  background: #20222c;
 
   color: white;
 
@@ -176,8 +199,8 @@ body {
 
 .apps {
   display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
 }
 
 .apps button {
@@ -185,17 +208,17 @@ body {
 
   border: none;
 
-  border-radius: 12px;
+  border-radius: 10px;
 
   color: white;
 
-  background: rgba(255,255,255,.07);
+  background: #20222c;
 
   cursor: pointer;
 }
 
 .apps button:hover {
-  background: rgba(255,255,255,.15);
+  background: #303342;
 }
 
 /* WINDOWS */
@@ -209,17 +232,15 @@ body {
   left: 50%;
   top: 45%;
 
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 
-  background: rgba(15,16,25,.92);
+  background: #11131c;
 
-  backdrop-filter: blur(25px);
+  border: 1px solid #383a45;
 
-  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
 
-  border-radius: 16px;
-
-  box-shadow: 0 25px 80px rgba(0,0,0,.6);
+  box-shadow: 0 25px 70px #000;
 
   overflow: hidden;
 
@@ -237,24 +258,27 @@ body {
 
   padding: 0 12px;
 
-  border-bottom: 1px solid rgba(255,255,255,.1);
+  background: #171923;
+
+  border-bottom: 1px solid #30323d;
 }
 
 .titlebar b {
   flex: 1;
+  margin-left: 8px;
 }
 
 .close {
   border: none;
 
-  background: rgba(255,255,255,.08);
+  background: #252733;
 
   color: white;
 
   width: 35px;
   height: 30px;
 
-  border-radius: 8px;
+  border-radius: 7px;
 
   cursor: pointer;
 }
@@ -278,13 +302,13 @@ body {
 
   padding: 11px;
 
-  background: rgba(255,255,255,.08);
+  background: #20222c;
 
-  border: 1px solid rgba(255,255,255,.1);
+  border: 1px solid #444;
 
   color: white;
 
-  border-radius: 10px;
+  border-radius: 9px;
 }
 
 .browserBar button,
@@ -293,7 +317,7 @@ body {
 
   padding: 10px 15px;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
   color: white;
 
@@ -304,13 +328,13 @@ body {
 
 .browserFrame {
   width: 100%;
-  height: calc(100% - 70px);
+  height: calc(100% - 65px);
 
   border: none;
 
   background: white;
 
-  border-radius: 12px;
+  border-radius: 9px;
 }
 
 /* FILES */
@@ -320,9 +344,9 @@ body {
 
   margin: 8px 0;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
-  background: rgba(255,255,255,.07);
+  background: #20222c;
 }
 
 /* STORE */
@@ -337,9 +361,9 @@ body {
 
   margin-bottom: 10px;
 
-  border-radius: 12px;
+  border-radius: 10px;
 
-  background: rgba(255,255,255,.07);
+  background: #20222c;
 }
 
 .storeItem div {
@@ -354,10 +378,12 @@ body {
 
   padding: 15px 0;
 
-  border-bottom: 1px solid rgba(255,255,255,.1);
+  border-bottom: 1px solid #30323d;
 }
 
-@media(max-width:600px) {
+/* MOBILE */
+
+@media (max-width: 600px) {
 
   #launcher {
     width: calc(100vw - 30px);
@@ -368,4 +394,4 @@ body {
     height: calc(100vh - 75px);
   }
 
-                                }
+    }
