@@ -1,476 +1,773 @@
 let windows = {};
-let windowNumber = 0;
-
-/* BOOT */
-
-setTimeout(() => {
-
-  document.getElementById("boot").style.display = "none";
-  document.getElementById("desktop").style.display = "block";
-
-}, 1800);
+let windowNumber = 100;
 
 
-/* LAUNCHER */
+/* =========================
+   START PULSE OS
+========================= */
+
+window.addEventListener("load", function () {
+
+    setTimeout(function () {
+
+        const boot = document.getElementById("boot");
+        const desktop = document.getElementById("desktop");
+
+        if (boot) {
+            boot.style.display = "none";
+        }
+
+        if (desktop) {
+            desktop.style.display = "block";
+        }
+
+    }, 1800);
+
+});
+
+
+/* =========================
+   START MENU
+========================= */
 
 function toggleLauncher() {
 
-  const launcher = document.getElementById("launcher");
+    const launcher = document.getElementById("launcher");
 
-  launcher.style.display =
-    launcher.style.display === "block"
-      ? "none"
-      : "block";
+    if (launcher.style.display === "block") {
+        launcher.style.display = "none";
+    } else {
+        launcher.style.display = "block";
+    }
 
 }
 
 
-/* WINDOW SYSTEM */
+/* =========================
+   CREATE WINDOWS
+========================= */
 
 function createWindow(name, title, icon, content) {
 
-  if (windows[name]) {
+    if (windows[name]) {
 
-    windows[name].style.zIndex = ++windowNumber;
+        windows[name].style.zIndex = ++windowNumber;
 
-    return;
+        return;
 
-  }
+    }
 
-  const win = document.createElement("div");
+    const win = document.createElement("div");
 
-  win.className = "window";
-
-  win.style.zIndex = ++windowNumber;
-
-  win.innerHTML = `
-
-    <div class="titlebar">
-
-      <span>${icon}</span>
-
-      <b>${title}</b>
-
-      <button class="close">×</button>
-
-    </div>
-
-    <div class="windowBody">
-
-      ${content}
-
-    </div>
-
-  `;
-
-  document.getElementById("windows").appendChild(win);
-
-  windows[name] = win;
-
-  win.querySelector(".close").onclick = () => {
-
-    win.remove();
-
-    delete windows[name];
-
-    const task = document.querySelector(
-      `[data-task="${name}"]`
-    );
-
-    if (task) task.remove();
-
-  };
-
-  const task = document.createElement("button");
-
-  task.className = "task";
-
-  task.dataset.task = name;
-
-  task.innerHTML = `${icon} ${title}`;
-
-  task.onclick = () => {
+    win.className = "window";
 
     win.style.zIndex = ++windowNumber;
 
-  };
+    win.innerHTML = `
 
-  document.getElementById("tasks").appendChild(task);
+        <div class="titlebar">
+
+            <span>${icon}</span>
+
+            <b>${title}</b>
+
+            <button class="close">×</button>
+
+        </div>
+
+        <div class="windowBody">
+
+            ${content}
+
+        </div>
+
+    `;
+
+
+    document
+        .getElementById("windows")
+        .appendChild(win);
+
+
+    windows[name] = win;
+
+
+    /* CLOSE BUTTON */
+
+    win.querySelector(".close").onclick = function () {
+
+        win.remove();
+
+        delete windows[name];
+
+        const task =
+            document.querySelector(
+                '[data-task="' + name + '"]'
+            );
+
+        if (task) {
+            task.remove();
+        }
+
+    };
+
+
+    /* TASKBAR BUTTON */
+
+    const task =
+        document.createElement("button");
+
+    task.className = "task";
+
+    task.dataset.task = name;
+
+    task.innerHTML =
+        icon + " " + title;
+
+
+    task.onclick = function () {
+
+        win.style.zIndex = ++windowNumber;
+
+    };
+
+
+    document
+        .getElementById("tasks")
+        .appendChild(task);
 
 }
 
 
-/* BROWSER */
+/* =========================
+   BROWSER
+========================= */
 
 function openBrowser() {
 
-  toggleLauncher();
+    toggleLauncher();
 
-  createWindow(
-    "browser",
-    "Pulse Browser",
-    "🌐",
+    createWindow(
 
-    `
+        "browser",
 
-    <div class="browserBar">
+        "Pulse Browser",
 
-      <input
-        id="browserAddress"
-        value="https://www.google.com"
-        placeholder="Search Google or enter a website..."
-      >
+        "🌐",
 
-      <button onclick="goBrowser()">
-        Go
-      </button>
+        `
 
-    </div>
+        <div class="browserBar">
 
-    <iframe
-      id="browserFrame"
-      class="browserFrame"
-      src="https://www.google.com"
-    ></iframe>
+            <input
+                id="browserAddress"
+                value="https://www.google.com"
+                placeholder="Search Google or enter a website..."
+            >
 
-    `
+            <button onclick="goBrowser()">
+                Go
+            </button>
 
-  );
+        </div>
+
+
+        <iframe
+            id="browserFrame"
+            class="browserFrame"
+            src="https://www.google.com"
+        ></iframe>
+
+        `
+
+    );
 
 }
 
 
-/* BROWSER NAVIGATION */
+/* =========================
+   BROWSER SEARCH
+========================= */
 
 function goBrowser() {
 
-  const input =
-    document.getElementById("browserAddress");
+    const input =
+        document.getElementById(
+            "browserAddress"
+        );
 
-  let address = input.value.trim();
+    if (!input) return;
 
-  if (!address.startsWith("http://") &&
-      !address.startsWith("https://")) {
 
-    address =
-      "https://www.google.com/search?q=" +
-      encodeURIComponent(address);
+    let address =
+        input.value.trim();
 
-  }
 
-  document.getElementById("browserFrame").src =
-    address;
+    if (
+        !address.startsWith("http://") &&
+        !address.startsWith("https://")
+    ) {
+
+        address =
+            "https://www.google.com/search?q=" +
+            encodeURIComponent(address);
+
+    }
+
+
+    const frame =
+        document.getElementById(
+            "browserFrame"
+        );
+
+    if (frame) {
+        frame.src = address;
+    }
 
 }
 
 
-/* FILE MANAGER */
+/* =========================
+   FILE MANAGER
+========================= */
 
 function openFiles() {
 
-  toggleLauncher();
+    toggleLauncher();
 
-  createWindow(
-    "files",
-    "Files",
-    "📁",
+    createWindow(
 
-    `
+        "files",
 
-    <h2>Pulse Files</h2>
+        "Files",
 
-    <p>
-      Files created by Pulse OS are stored in this
-      browser's local storage.
-    </p>
+        "📁",
 
-    <div class="file">
-      📄 Welcome.txt
-    </div>
+        `
 
-    <div class="file">
-      📁 Downloads
-    </div>
+        <h2>📁 Pulse Files</h2>
 
-    <br>
+        <p>
+            Welcome to your Pulse OS file manager.
+        </p>
 
-    <button
-      class="primary"
-      onclick="createTestFile()">
+        <div class="file">
+            📄 Welcome.txt
+        </div>
 
-      Create test file
+        <div class="file">
+            📁 Downloads
+        </div>
 
-    </button>
+        <br>
 
-    `
+        <button
+            class="primary"
+            onclick="createTestFile()">
 
-  );
+            Create Test File
+
+        </button>
+
+        `
+
+    );
 
 }
 
+
+/* =========================
+   CREATE DOWNLOAD
+========================= */
 
 function createTestFile() {
 
-  const blob =
-    new Blob(
-      ["Welcome to Pulse OS!"],
-      {type:"text/plain"}
-    );
+    const text =
+        "Welcome to Pulse OS!";
 
-  const url =
-    URL.createObjectURL(blob);
+    const blob =
+        new Blob(
+            [text],
+            {
+                type: "text/plain"
+            }
+        );
 
-  const a =
-    document.createElement("a");
 
-  a.href = url;
+    const url =
+        URL.createObjectURL(blob);
 
-  a.download =
-    "Pulse-Welcome.txt";
 
-  a.click();
+    const link =
+        document.createElement("a");
 
-  URL.revokeObjectURL(url);
+
+    link.href = url;
+
+    link.download =
+        "Pulse-Welcome.txt";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+
+    URL.revokeObjectURL(url);
 
 }
 
 
-/* APP STORE */
+/* =========================
+   APP STORE
+========================= */
 
 function openStore() {
 
-  toggleLauncher();
+    toggleLauncher();
 
-  createWindow(
-    "store",
-    "Pulse App Store",
-    "🛍️",
+    createWindow(
 
-    `
+        "store",
 
-    <h2>Pulse App Store</h2>
+        "Pulse App Store",
 
-    <p>
-      Web apps you can launch inside Pulse OS.
-    </p>
+        "🛍️",
 
-    <div class="storeItem">
+        `
 
-      🧮
+        <h2>🛍️ Pulse App Store</h2>
 
-      <div>
-        <b>Calculator</b>
-        <br>
-        <small>Simple calculator</small>
-      </div>
+        <p>
+            Download and open apps for Pulse OS.
+        </p>
 
-      <button
-        class="primary"
-        onclick="alert('Calculator coming soon!')">
 
-        Open
+        <div class="storeItem">
 
-      </button>
+            🧮
 
-    </div>
+            <div>
 
-    <div class="storeItem">
+                <b>Calculator</b>
 
-      📝
+                <br>
 
-      <div>
-        <b>Notes</b>
-        <br>
-        <small>Write notes</small>
-      </div>
+                <small>
+                    A simple calculator.
+                </small>
 
-      <button
-        class="primary"
-        onclick="alert('Notes coming soon!')">
+            </div>
 
-        Open
+            <button
+                class="primary"
+                onclick="openCalculator()">
 
-      </button>
+                Open
 
-    </div>
+            </button>
 
-    <div class="storeItem">
+        </div>
 
-      🎨
 
-      <div>
-        <b>Paint</b>
-        <br>
-        <small>Draw pictures</small>
-      </div>
+        <div class="storeItem">
 
-      <button
-        class="primary"
-        onclick="alert('Paint coming soon!')">
+            📝
 
-        Open
+            <div>
 
-      </button>
+                <b>Notes</b>
 
-    </div>
+                <br>
 
-    `
+                <small>
+                    Write and save notes.
+                </small>
 
-  );
+            </div>
+
+            <button
+                class="primary"
+                onclick="openNotes()">
+
+                Open
+
+            </button>
+
+        </div>
+
+
+        `
+
+    );
 
 }
 
 
-/* SETTINGS */
+/* =========================
+   CALCULATOR
+========================= */
+
+function openCalculator() {
+
+    createWindow(
+
+        "calculator",
+
+        "Calculator",
+
+        "🧮",
+
+        `
+
+        <input
+            id="calcInput"
+            style="
+                width:100%;
+                padding:15px;
+                background:#20222c;
+                color:white;
+                border:1px solid #444;
+                border-radius:10px;
+                font-size:22px;
+            "
+            placeholder="Example: 25 + 25"
+        >
+
+        <br><br>
+
+        <button
+            class="primary"
+            onclick="calculate()">
+
+            Calculate
+
+        </button>
+
+        <h2 id="calcResult"></h2>
+
+        `
+
+    );
+
+}
+
+
+function calculate() {
+
+    const input =
+        document.getElementById(
+            "calcInput"
+        );
+
+    const result =
+        document.getElementById(
+            "calcResult"
+        );
+
+
+    try {
+
+        result.textContent =
+            Function(
+                '"use strict"; return (' +
+                input.value +
+                ')'
+            )();
+
+    } catch {
+
+        result.textContent =
+            "Invalid calculation";
+
+    }
+
+}
+
+
+/* =========================
+   NOTES
+========================= */
+
+function openNotes() {
+
+    createWindow(
+
+        "notes",
+
+        "Notes",
+
+        "📝",
+
+        `
+
+        <h2>📝 Notes</h2>
+
+        <textarea
+            id="notesArea"
+            style="
+                width:100%;
+                height:300px;
+                background:#20222c;
+                color:white;
+                border:1px solid #444;
+                border-radius:10px;
+                padding:15px;
+                resize:none;
+            "
+            placeholder="Write something..."
+        ></textarea>
+
+        <br><br>
+
+        <button
+            class="primary"
+            onclick="saveNotes()">
+
+            Save Notes
+
+        </button>
+
+        `
+
+    );
+
+
+    const saved =
+        localStorage.getItem(
+            "pulseNotes"
+        );
+
+
+    if (saved) {
+
+        document.getElementById(
+            "notesArea"
+        ).value = saved;
+
+    }
+
+}
+
+
+function saveNotes() {
+
+    const text =
+        document.getElementById(
+            "notesArea"
+        ).value;
+
+
+    localStorage.setItem(
+        "pulseNotes",
+        text
+    );
+
+
+    alert("Notes saved!");
+
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
 
 function openSettings() {
 
-  toggleLauncher();
+    toggleLauncher();
 
-  createWindow(
-    "settings",
-    "Settings",
-    "⚙️",
+    createWindow(
 
-    `
+        "settings",
 
-    <h2>Settings</h2>
+        "Settings",
 
-    <div class="setting">
+        "⚙️",
 
-      <span>Dark Mode</span>
+        `
 
-      <button
-        class="primary"
-        onclick="toggleDark()">
+        <h2>⚙️ Settings</h2>
 
-        Toggle
 
-      </button>
+        <div class="setting">
 
-    </div>
+            <span>
+                Change wallpaper
+            </span>
 
-    <div class="setting">
+            <button
+                class="primary"
+                onclick="changeWallpaper()">
 
-      <span>Change wallpaper</span>
+                Change
 
-      <button
-        class="primary"
-        onclick="changeWallpaper()">
+            </button>
 
-        Change
+        </div>
 
-      </button>
 
-    </div>
+        <div class="setting">
 
-    <div class="setting">
+            <span>
+                Restart Pulse OS
+            </span>
 
-      <span>Reset Pulse OS</span>
+            <button
+                class="primary"
+                onclick="location.reload()">
 
-      <button
-        class="primary"
-        onclick="location.reload()">
+                Restart
 
-        Restart
+            </button>
 
-      </button>
+        </div>
 
-    </div>
+        `
 
-    `
-
-  );
+    );
 
 }
 
 
-/* WALLPAPER */
+/* =========================
+   CHANGE WALLPAPER
+========================= */
 
 function changeWallpaper() {
 
-  document.getElementById("wallpaper").style.background =
-    "linear-gradient(135deg,#30135e,#053d52,#111)";
+    document.getElementById(
+        "wallpaper"
+    ).style.background =
+        "linear-gradient(135deg,#35115e,#063f54,#080910)";
 
 }
 
 
-/* ABOUT */
+/* =========================
+   ABOUT
+========================= */
 
 function openAbout() {
 
-  toggleLauncher();
+    toggleLauncher();
 
-  createWindow(
-    "about",
-    "About Pulse OS",
-    "💻",
+    createWindow(
 
-    `
+        "about",
 
-    <h1>Pulse OS</h1>
+        "About Pulse OS",
 
-    <p>
-      Version 1.0
-    </p>
+        "💻",
 
-    <p>
-      A browser-based operating system
-      made with HTML, CSS and JavaScript.
-    </p>
+        `
 
-    <p>
-      This project is designed to run on
-      GitHub Pages.
-    </p>
+        <h1>Pulse OS</h1>
 
-    `
+        <h3>Version 1.0</h3>
 
-  );
+        <p>
+            A browser-based operating system
+            built with HTML, CSS and JavaScript.
+        </p>
+
+        <p>
+            Made to run through GitHub Pages.
+        </p>
+
+        `
+
+    );
 
 }
 
 
-/* CLOCK */
+/* =========================
+   CLOCK
+========================= */
 
 function updateClock() {
 
-  const now = new Date();
+    const clock =
+        document.getElementById(
+            "clock"
+        );
 
-  document.getElementById("clock")
-    .textContent =
-    now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+
+    if (!clock) return;
+
+
+    const now =
+        new Date();
+
+
+    clock.textContent =
+        now.toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
 
 }
 
-setInterval(updateClock, 1000);
+
+setInterval(
+    updateClock,
+    1000
+);
 
 updateClock();
 
 
-/* APP SEARCH */
+/* =========================
+   APP SEARCH
+========================= */
 
-document
-  .getElementById("searchApps")
-  .addEventListener("input", function() {
+const search =
+    document.getElementById(
+        "searchApps"
+    );
 
-    const search =
-      this.value.toLowerCase();
 
-    document
-      .querySelectorAll(".apps button")
-      .forEach(button => {
+if (search) {
 
-        button.style.display =
-          button.textContent
-            .toLowerCase()
-            .includes(search)
-              ? "block"
-              : "none";
+    search.addEventListener(
+        "input",
+        function () {
 
-      });
+            const value =
+                this.value.toLowerCase();
 
-  });
+
+            document
+                .querySelectorAll(
+                    ".apps button"
+                )
+                .forEach(function (button) {
+
+                    if (
+                        button.textContent
+                            .toLowerCase()
+                            .includes(value)
+                    ) {
+
+                        button.style.display =
+                            "block";
+
+                    } else {
+
+                        button.style.display =
+                            "none";
+
+                    }
+
+                });
+
+        }
+    );
+
+}
